@@ -2,7 +2,7 @@
 
 > AI-Governed Self-Evolving Smart Contract Engine
 
-**"Not 'AI writes your contract' — but 'AI manages your contract within rules you set.'"**
+**"Not 'AI writes your contract' - but 'AI manages your contract within rules you set.'"**
 
 The world's first open-source composable framework for parameterized, AI-governed smart contracts with ZK-verified decisions and on-chain audit trails.
 
