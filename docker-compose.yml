@@ -1,1 +1,75 @@
+version: "3.9"
 
+services:
+  # ── Redis ───────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7.2-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ── FastAPI ─────────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: ./packages/agents
+      dockerfile: Dockerfile
+      target: api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file: .env
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: uvicorn living_contract.api.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./packages/agents:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Agent Pipeline ───────────────────────────────────────────────────────────
+  agents:
+    build:
+      context: ./packages/agents
+      dockerfile: Dockerfile
+      target: agents
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    command: python -m living_contract.pipeline
+    volumes:
+      - ./packages/agents:/app
+
+  # ── Next.js Dashboard ───────────────────────────────────────────────────────
+  dashboard:
+    build:
+      context: ./packages/dashboard
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - api
+
+volumes:
+  redis_data:
