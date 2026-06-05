@@ -160,7 +160,7 @@ Full docs: http://localhost:8000/docs
 
 ## License
 
-MIT — free for commercial use. See [LICENSE](LICENSE).
+MIT free for commercial use. See [LICENSE](LICENSE).
 
 ---
 
