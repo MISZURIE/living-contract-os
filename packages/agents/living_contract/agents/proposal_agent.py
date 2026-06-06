@@ -13,6 +13,8 @@ from openai import AsyncOpenAI
 
 from ..feeds.price_feed import PriceData
 
+GROQ_BASE_URL = "https://api.groq.com/openai/v1"
+
 logger = structlog.get_logger(__name__)
 
 
@@ -58,8 +60,11 @@ PROPOSAL_SCHEMA = {
 
 
 class ProposalAgent:
-    def __init__(self, api_key: str, model: str = "gpt-4o"):
-        self.client = AsyncOpenAI(api_key=api_key)
+    def __init__(self, api_key: str, model: str = "llama-3.3-70b-versatile"):
+        self.client = AsyncOpenAI(
+            api_key=api_key,
+            base_url=GROQ_BASE_URL,
+        )
         self.model  = model
 
     async def propose(

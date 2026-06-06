@@ -11,9 +11,9 @@ class Settings(BaseSettings):
     contract_address: str      = Field(..., env="CONTRACT_ADDRESS")
     audit_log_address: str     = Field(..., env="AUDIT_LOG_ADDRESS")
 
-    # AI
+    # AI — supports OpenAI and Groq (Groq uses same OpenAI SDK with different base_url)
     openai_api_key: str        = Field(..., env="OPENAI_API_KEY")
-    llm_model: str             = Field("gpt-4o", env="LLM_MODEL")
+    llm_model: str             = Field("llama-3.3-70b-versatile", env="LLM_MODEL")
 
     # Redis
     redis_url: str             = Field("redis://redis:6379/0", env="REDIS_URL")
