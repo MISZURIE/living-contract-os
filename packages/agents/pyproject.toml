@@ -10,6 +10,7 @@ packages = [{include = "living_contract"}]
 python = "^3.11"
 web3 = "^7.0.0"
 openai = "^1.30.0"
+groq = "^0.9.0"
 pydantic = "^2.7.0"
 pydantic-settings = "^2.3.0"
 httpx = "^0.27.0"

@@ -8,12 +8,12 @@ import json
 from dataclasses import dataclass
 from typing import Optional
 
+import os
+
 import structlog
-from openai import AsyncOpenAI
+from groq import AsyncGroq
 
 from ..feeds.price_feed import PriceData
-
-GROQ_BASE_URL = "https://api.groq.com/openai/v1"
 
 logger = structlog.get_logger(__name__)
 
@@ -61,10 +61,7 @@ PROPOSAL_SCHEMA = {
 
 class ProposalAgent:
     def __init__(self, api_key: str, model: str = "llama-3.3-70b-versatile"):
-        self.client = AsyncOpenAI(
-            api_key=api_key,
-            base_url=GROQ_BASE_URL,
-        )
+        self.client = AsyncGroq(api_key=api_key)
         self.model  = model
 
     async def propose(
