@@ -29,7 +29,7 @@ services:
     depends_on:
       redis:
         condition: service_healthy
-    command: uvicorn living_contract.api.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn living_contract.api_main:app --host 0.0.0.0 --port 8000 --reload
     volumes:
       - ./packages/agents:/app
     healthcheck:
